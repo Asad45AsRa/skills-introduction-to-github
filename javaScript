@@ -1,0 +1,28 @@
+const exp = require('express');
+const dbConnection = require('./Mongodb');
+
+const app = exp();
+app.use(exp.json());
+
+app.get('/', async (req, res)=>{
+    let data = await dbConnection();
+    data = await data.find({}).toArray();
+    res.send(data);
+})
+
+app.post('/', async (req, res)=>{
+    
+    let data2 = await dbConnection();
+    let result = await data2.insertMany([req.body]);
+    console.log(result);
+    res.send(result);
+});
+
+app.put('/', async (req, res)=>{
+    let data = await dbConnection();
+    let result = await data.updateOne(
+        {object : 13}, {$set : req.body}
+    )
+})
+
+app.listen('5000');
